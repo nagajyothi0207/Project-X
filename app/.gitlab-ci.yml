@@ -1,5 +1,18 @@
-image: <pick the image you think is the most suitable to complete the task>
+image: node:latest
 
 stages:
   - test
   - deploy
+production:
+  stage: test
+  before_script:
+    - npm config set prefix /usr/local
+    - npm install -g serverless
+    - export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+    - export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+
+  stage: deploy
+    - serverless deploy --stage dev --verbose
+
+  only:
+    - main
